@@ -164,4 +164,4 @@
 Все микросервисы общаются при помощи gRPC, кроме Notification – он полностью реактивный.
 
 ### Диаграма
-![Monolingo Microservice Scheme](.scheme.png)
+![Monolingo Microservice Scheme](scheme.png)
