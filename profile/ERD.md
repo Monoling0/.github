@@ -20,7 +20,7 @@ package Users {
     }
 
     table(subscribers) {
-        primary_key("publisher_id, follower_id") : 
+        primary_key("publisher_id, follower_id")
         --
         foreign_key(publisher_id) : int 
         foreign_key(follower_id) : int 
@@ -61,17 +61,18 @@ package Courses {
             column(name) : varchar(64) NOT NULL
             column(description) : text
             column(level) : char(2)
+            column(is_draft) : bool NOT NULL
         }
 
         table(courses_creators) {
-            primary_key("course_id, user_id") : 
+            primary_key("course_id, user_id")
             --
             foreign_key(course_id) : int 
             foreign_key(user_id) : int 
         }
 
         table(courses_students) {
-            primary_key("course_id, user_id") : 
+            primary_key("course_id, user_id")
             --
             foreign_key(course_id) : int 
             foreign_key(user_id) : int 
@@ -87,12 +88,14 @@ package Courses {
             foreign_key(course_id) : int 
             column(name) : varchar(64) NOT NULL
             column(description) : text
+            column(module_number) : int NOT NULL CHECK (module_number >= 0)
             --
-            Порядок модулей в курсе определяется по возрастанию module_id.
+            UNIQUE(course_id, module_number)
+            Порядок модулей в курсе определяется по возрастанию module_number.
         }
 
         table(modules_students) {
-            primary_key("module_id, user_id") : 
+            primary_key("module_id, user_id")
             --
             foreign_key(module_id) : int 
             foreign_key(user_id) : int 
@@ -107,12 +110,14 @@ package Courses {
                 foreign_key(module_id) : int 
                 column(name) : varchar(64) NOT NULL
                 column(description) : text
+                column(lesson_number) : int NOT NULL CHECK (lesson_number >= 0)
                 --
-                Порядок уроков в модуле определяется по возрастанию lesson_id.
+                UNIQUE(module_id, lesson_number)
+                Порядок уроков в модуле определяется по возрастанию lesson_number.
             }
 
             table(lessons_students) {
-                primary_key("lesson_id, user_id") : 
+                primary_key("lesson_id, user_id")
                 --
                 foreign_key(lesson_id) : int 
                 foreign_key(user_id) : int 
@@ -125,8 +130,10 @@ package Courses {
                     --
                     foreign_key(lesson_id) : int 
                     column(question_text) : text
+                    column(question_number) : int NOT NULL CHECK (question_number >= 0)
                     --
-                    Порядок вопросов в уроке определяется по возрастанию question_id.
+                    UNIQUE(lesson_id, question_number)
+                    Порядок вопросов в уроке определяется по возрастанию question_number.
                 }
 
                 table(answers) {
