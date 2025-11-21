@@ -111,6 +111,7 @@ package Courses {
                 column(name) : varchar(64) NOT NULL
                 column(description) : text
                 column(lesson_number) : int NOT NULL CHECK (lesson_number >= 0)
+                column(experience) : int NOT NULL CHECK (experience >= 0)
                 --
                 UNIQUE(module_id, lesson_number)
                 Порядок уроков в модуле определяется по возрастанию lesson_number.
