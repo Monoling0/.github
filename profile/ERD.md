@@ -103,13 +103,7 @@ package Progress {
         --
         foreign_key(course_id) : int
         foreign_key(user_id) : int
-    }
-
-    table(passed_courses_students) {
-        primary_key("course_id, user_id")
-        --
-        foreign_key(course_id) : int
-        foreign_key(user_id) : int
+        column(passed) : boolean NOT NULL
     }
 
     table(passed_modules_students) {
@@ -197,9 +191,6 @@ package Feed {
 
 "courses_creators" }o--o{ "users"
 "courses_creators" }o--o{ "сourses"
-
-"passed_courses_students" }o--o{ "users"
-"passed_courses_students" }o--o{ "сourses"
 
 "passed_modules_students" }o--o{ "users"
 "passed_modules_students" }o--o{ "modules"
