@@ -7,16 +7,19 @@
 !define column(x) <color:#efefef><&media-record></color> x
 !define table(x) entity x << (T, white) >>
 
-left to right direction
-
 package Users {
     table(users) {
         primary_key(user_id) : serial 
         --
         column(email) : varchar(64) NOT NULL UNIQUE
-        column(nickname) : varchar(64) NOT NULL
         column(registration_date) : date NOT NULL
-        column(role) : varchar(7) NOT NULL CHECK (type in ('admin', 'creator', 'student'))
+        column(update_date) : date NOT NULL
+    }
+
+    table(users_passwords) {
+        primary_key(foreign_key(user_id)) : int  
+        --
+        column(password_hash) : char(32) NOT NULL
     }
 
     table(subscribers) {
@@ -26,10 +29,24 @@ package Users {
         foreign_key(follower_id) : int 
     }
 
-    table(users_passwords) {
-        primary_key(foreign_key(user_id)) : int  
+    table(roles) {
+        primary_key(id) : bigint
         --
-        column(password) : char(32) NOT NULL
+        code : text NOT NULL
+    }
+
+    table(users_roles) {
+        primary_key("account_id, role_id")
+        --
+        foreign_key(user_id) : bigint
+        foreign_key(role_id) : bigint
+    }
+
+    table(student_profiles) {
+        primary_key(foreign_key(user_id)) : bigint
+        --
+        nickname : varchar(64) UNIQUE NOT NULL
+        profile_photo_url : text
     }
 }
 
@@ -182,6 +199,11 @@ package Feed {
 
 "users" }o--o{ "subscribers"
 
+"users_roles" -- "users"
+"users_roles" }o--|| "roles"
+
+"student_profiles" |o--|| "users"
+
 "users_levels" -up- "users"
 "users_levels" }o-- "levels"
 
@@ -199,8 +221,8 @@ package Feed {
 "courses_creators" }o--o{ "users"
 "courses_creators" }o--o{ "сourses"
 
-"passed_modules_courses" }o--o{ "users"
-"passed_modules_courses" }o--o{ "courses"
+"passed_courses_students" }o--o{ "users"
+"passed_courses_students" }o--o{ "сourses"
 
 "passed_modules_students" }o--o{ "users"
 "passed_modules_students" }o--o{ "modules"
