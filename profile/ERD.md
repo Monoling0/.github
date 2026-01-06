@@ -103,7 +103,15 @@ package Progress {
         --
         foreign_key(course_id) : int
         foreign_key(user_id) : int
-        column(passed) : boolean NOT NULL
+    }
+
+    table(passed_courses_students) {
+        primary_key("module_id, user_id")
+        --
+        foreign_key(module_id) : int
+        foreign_key(user_id) : int
+        column(date) : date
+
     }
 
     table(passed_modules_students) {
@@ -111,6 +119,7 @@ package Progress {
         --
         foreign_key(module_id) : int
         foreign_key(user_id) : int
+        column(date) : date
     }
 
     table(passed_lessons_students) {
@@ -118,6 +127,7 @@ package Progress {
         --
         foreign_key(lesson_id) : int
         foreign_key(user_id) : int
+        column(date) : date
     }
 }
 
@@ -134,10 +144,7 @@ package Feed {
     table(users_week_progress) {
         primary_key(foreign_key(user_id)) : int
         --
-        column(course_count) : int NOT NULL CHECK (course_count >= 0)
-        column(module_count) : int NOT NULL CHECK (module_count >= 0)
-        column(level_count) : int NOT NULL CHECK (level_count >= 0)
-        column(sunscribers) : int NOT NULL CHECK (level_count >= 0)
+        column(new_subscribers_count) : int NOT NULL CHECK (level_count >= 0)
     }
 
     table(users_fires) {
@@ -191,6 +198,9 @@ package Feed {
 
 "courses_creators" }o--o{ "users"
 "courses_creators" }o--o{ "сourses"
+
+"passed_modules_courses" }o--o{ "users"
+"passed_modules_courses" }o--o{ "courses"
 
 "passed_modules_students" }o--o{ "users"
 "passed_modules_students" }o--o{ "modules"
