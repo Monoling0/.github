@@ -11,6 +11,7 @@ package Users {
     entity Account {
         + account_id : bigint [PK] <<generated>>
         --
+        * role_id : biging [FK]
         * email : text { unique }
         * created_at : timestamp
         * updated_at : timestamp
@@ -33,13 +34,6 @@ package Users {
         --
         * nickname : text {unique}
         profile_photo_url : text
-    }
-
-    table(account_roles) {
-        primary_key("account_id, role_id")
-        --
-        foreign_key(account_id) : bigint
-        foreign_key(role_id) : bigint
     }
 
     table(followers) {
