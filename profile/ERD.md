@@ -11,36 +11,37 @@ package Users {
     entity Account {
         + account_id : bigint [PK] <<generated>>
         --
-        * role_id : biging [FK]
-        * email : text { unique }
-        * created_at : timestamp
-        * updated_at : timestamp
+        * role_id : bigint NOT NULL [FK]
+        * password_id : bigint NOT NULL [FK]
+        * email : text UNIQUE NOT NULL
+        * created_at : timestamp NOT NULL
+        * updated_at : timestamp NOT NULL
     }
 
     entity AccountPassword {
-        + account_id : bigint [PK, FK]
+        + password_id : bigint [PK] <<generated>>
         --
-        * password_hash : text
+        * password_hash : text NOT NULL
     }
 
     entity Role {
         + role_id : bigint [PK] <<generated>>
         --
-        * code : text
+        * code : text UNIQUE NOT NULL
     }
 
     entity StudentProfile {
         + account_id : bigint [PK, FK]
         --
-        * nickname : text {unique}
+        * nickname : text UNIQUE NOT NULL
         profile_photo_url : text
     }
 
     table(followers) {
         primary_key("follower_id, followee_id")
         --
-        foreign_key(follower_id) : bigint
-        foreign_key(followee_id) : bigint
+        foreign_key(follower_id) : bigint NOT NULL
+        foreign_key(followee_id) : bigint NOT NULL
         created_at : timestamp with timezone NOT NULL
     }
 }
