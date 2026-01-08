@@ -8,45 +8,46 @@
 !define table(x) entity x << (T, white) >>
 
 package Users {
-    table(users) {
-        primary_key(user_id) : serial 
+    entity Account {
+        + account_id : bigint [PK] <<generated>>
         --
-        column(email) : varchar(64) NOT NULL UNIQUE
-        column(registration_date) : date NOT NULL
-        column(update_date) : date NOT NULL
+        * email : text { unique }
+        * created_at : timestamp
+        * updated_at : timestamp
     }
 
-    table(users_passwords) {
-        primary_key(foreign_key(user_id)) : int  
+    entity AccountPassword {
+        + account_id : bigint [PK, FK]
         --
-        column(password_hash) : char(32) NOT NULL
+        * password_hash : text
     }
 
-    table(subscribers) {
-        primary_key("publisher_id, follower_id")
+    entity Role {
+        + role_id : bigint [PK] <<generated>>
         --
-        foreign_key(publisher_id) : int 
-        foreign_key(follower_id) : int 
+        * code : text
     }
 
-    table(roles) {
-        primary_key(id) : bigint
+    entity StudentProfile {
+        + account_id : bigint [PK, FK]
         --
-        code : text NOT NULL
+        * nickname : text {unique}
+        profile_photo_url : text
     }
 
-    table(users_roles) {
+    table(account_roles) {
         primary_key("account_id, role_id")
         --
-        foreign_key(user_id) : bigint
+        foreign_key(account_id) : bigint
         foreign_key(role_id) : bigint
     }
 
-    table(student_profiles) {
-        primary_key(foreign_key(user_id)) : bigint
+    table(followers) {
+        primary_key("follower_id, followee_id")
         --
-        nickname : varchar(64) UNIQUE NOT NULL
-        profile_photo_url : text
+        foreign_key(follower_id) : bigint
+        foreign_key(followee_id) : bigint
+        created_at : timestamp with timezone NOT NULL
     }
 }
 
@@ -194,15 +195,13 @@ package Feed {
     }
 }
 
+Account ||--|| AccountPassword
 
-"users" -- "users_passwords"
+Account }o--|| Role
 
-"users" }o--o{ "subscribers"
+StudentProfile |o--|| Account
 
-"users_roles" -- "users"
-"users_roles" }o--|| "roles"
-
-"student_profiles" |o--|| "users"
+StudentProfile }o--o{ StudentProfile
 
 "users_levels" -up- "users"
 "users_levels" }o-- "levels"
